@@ -10,23 +10,18 @@ mkdir dist
 export COPYFILE_DISABLE=1
 
 for os in "${osList[@]}"; do
-    if [ "$os" = "windows" ]; then
-        for arch in "${archList[@]}"; do
-            echo "$projectName-$os-$version-$arch"
-            mkdir "./dist/$projectName-$os-$version-$arch"
-            cd ../ || exit
+    for arch in "${archList[@]}"; do
+        echo "$projectName-$os-$version-$arch"
+        mkdir "./dist/$projectName-$os-$version-$arch"
+        cd ../ || exit
+        if [ "$os" = "windows" ]; then
             env GOOS="$os" GOARCH="$arch" CGO_ENABLED=0 go build -o "./release/dist/$projectName-$os-$version-$arch/spf.exe" main.go
             cd ./release || exit
             zip -r "./dist/$projectName-$os-$version-$arch.zip" "./dist/$projectName-$os-$version-$arch"
-        done
-    else
-        for arch in "${archList[@]}"; do
-            echo "$projectName-$os-$version-$arch"
-            mkdir "./dist/$projectName-$os-$version-$arch"
-            cd ../ || exit
+        else
             env GOOS="$os" GOARCH="$arch" CGO_ENABLED=0 go build -o "./release/dist/$projectName-$os-$version-$arch/spf" main.go
             cd ./release || exit
             tar czf "./dist/$projectName-$os-$version-$arch.tar.gz" "./dist/$projectName-$os-$version-$arch"
-        done
-    fi
+        fi
+    done
 done
