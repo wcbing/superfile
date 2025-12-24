@@ -17,11 +17,11 @@ for os in "${osList[@]}"; do
         if [ "$os" = "windows" ]; then
             env GOOS="$os" GOARCH="$arch" CGO_ENABLED=0 go build -o "./release/dist/$projectName-$os-$version-$arch/spf.exe" main.go
             cd ./release || exit
-            zip -r "./dist/$projectName-$os-$version-$arch.zip" "./dist/$projectName-$os-$version-$arch"
+            zip -jr "./dist/$projectName-$os-$version-$arch.zip" "./dist/$projectName-$os-$version-$arch"
         else
             env GOOS="$os" GOARCH="$arch" CGO_ENABLED=0 go build -o "./release/dist/$projectName-$os-$version-$arch/spf" main.go
             cd ./release || exit
-            tar czf "./dist/$projectName-$os-$version-$arch.tar.gz" "./dist/$projectName-$os-$version-$arch"
+            tar czf "./dist/$projectName-$os-$version-$arch.tar.gz" -C "./dist/$projectName-$os-$version-$arch" .
         fi
     done
 done
